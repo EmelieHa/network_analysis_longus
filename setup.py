@@ -231,7 +231,7 @@ for char in dict_of_dicts.keys():
             d_and_c.add_edge(char, co_char, weight=dict_of_dicts[char][co_char], text=str(dict_of_dicts[char][co_char]))
 
 #get position for the nodes
-pos_ = nx.spring_layout(d_and_c)
+pos_ = nx.spring_layout(d_and_c, seed=100)
 
 #test from here:
 
@@ -254,7 +254,7 @@ def make_edge(x, y, text, width):
     return  go.Scatter(x         = x,
                        y         = y,
                        line      = dict(width = width,
-                                   color = 'cadetblue'),
+                                   color = 'darkblue'),
                        hoverinfo = 'text',
                        text      = ([text]),
                        mode      = 'lines')
@@ -319,7 +319,7 @@ fig.update_xaxes(showticklabels = False)
 
 fig.update_yaxes(showticklabels = False)
 
-#fig.show()
+fig.show()
 
 
 
@@ -330,5 +330,3 @@ deg_cent = nx.degree_centrality(d_and_c)
 deg_bet = nx.betweenness_centrality(d_and_c)
 
 print(deg_bet)
-
-
