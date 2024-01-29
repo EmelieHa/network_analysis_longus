@@ -43,10 +43,7 @@ def divide_sections(text):
 
 def find_characters(section):
     characters_list = []
-    non_speech = re.sub(r'(?<=«)(.*?)(?=»)', '', section)
-    non_speech = word_tokenize(non_speech)
-    non_speech_tokens = [w for w in non_speech if len(w) > 1]
-    cltk_doc = cltk_greek.analyze(' '.join(non_speech_tokens))
+    cltk_doc = cltk_greek.analyze(section)
     for sent in cltk_doc.sentences:
             for word in sent:
                 if word.upos == 'PROPN':
@@ -130,21 +127,18 @@ for c in final_list_chars:
     dict_of_dicts[c] = {}
 
 
-#clean sections from speech
+#iterate through sections again
 def clean_sections(text):
     clean_sections = []
     tree = etree.parse(text)
     root = tree.getroot()
     for elem in root.findall('content'):
         section = elem.find('text').text
-        non_speech = re.sub(r'(?<=«)(.*?)(?=»)', '', section)
-        non_speech = word_tokenize(non_speech)
-        non_speech_tokens = [w for w in non_speech if len(w) > 1]
-        clean_sections.append(' '.join(non_speech_tokens))
+        clean_sections.append(section)
     return clean_sections
 
 
-sections_longus = clean_sections('/Users/emeliehallenberg/cltk_data/Daphnis_et_Chloe.xml')
+#sections_longus = clean_sections('/Users/emeliehallenberg/cltk_data/Daphnis_et_Chloe.xml')
 
 
 #find co-occurrences in every section
@@ -168,18 +162,18 @@ def find_coocs(sections, char, li):
     dict_of_dicts[char] = dict_result
 
 for k, v in dict_of_dicts.items():
-    print(k, v)  """
+    print(k, v)  """ 
 
 #manually remove duplicates and add resulting co-occurrences together 
-dict_of_dicts = {'Νάπη': {'Δάφνις': 15, 'Λάμων': 11, 'Μυρτάλη': 7, 'Χλόη': 15, 'Φιλητᾶς': 2, 'Νύμφαι': 4, 'Δρύας': 25},
+dict_of_dicts = {'Νάπη': {'Δάφνις': 15, 'Λάμων': 11, 'Μυρτάλη': 7, 'Χλόη': 16, 'Φιλητᾶς': 2, 'Νύμφαι': 4, 'Δρύας': 25},
 'Διονυσοφάνης': {'Γνάθων': 3, 'Δάφνις': 14, 'Λάμων': 2, 'Χλόη': 6, 'Δρύας': 5, 'Ἄστυλος': 1, 'Νύμφαι': 1},
-'Πὰν': {'Δάφνις': 16, 'Λάμων': 4, 'Χλόη': 14, 'Φιλητᾶς': 7, 'Νύμφαι': 17, 'Γνάθων': 1},
+'Πὰν': {'Δάφνις': 18, 'Λάμων': 4, 'Χλόη': 19, 'Φιλητᾶς': 7, 'Νύμφαι': 17, 'Γνάθων': 1},
 'Ἄστυλος': {'Διονυσοφάνης': 1, 'Γνάθων': 6, 'Δάφνις': 17, 'Λάμων': 7, 'Μυρτάλη': 3},
 'Γνάθων': {'Διονυσοφάνης': 3, 'Πὰν': 1, 'Ἄστυλος': 6, 'Δάφνις': 25, 'Λάμων': 11, 'Μυρτάλη': 1, 'Νύμφαι': 1, 'Δρύας': 2},
-'Δάφνις': {'Νάπη': 15,  'Γνάθων': 25, 'Διονυσοφάνης': 14, 'Πὰν': 16, 'Ἄστυλος': 17, 'Λάμων': 49, 'Μυρτάλη': 28, 'Χλόη': 296, 'Φιλητᾶς': 26, 'Νύμφαι': 31, 'Δρύας': 71},
+'Δάφνις': {'Νάπη': 15,  'Γνάθων': 25, 'Διονυσοφάνης': 14, 'Πὰν': 18, 'Ἄστυλος': 17, 'Λάμων': 49, 'Μυρτάλη': 28, 'Χλόη': 297, 'Φιλητᾶς': 26, 'Νύμφαι': 31, 'Δρύας': 71},
 'Λάμων': {'Νάπη': 11, 'Ἄστυλος': 3, 'Διονυσοφάνης': 2, 'Πὰν': 4, 'Ἄστυλος': 4, 'Γνάθων': 11, 'Δάφνις': 49, 'Μυρτάλη': 33, 'Χλόη': 25, 'Φιλητᾶς': 6, 'Νύμφαι': 15, 'Δρύας': 32},
 'Μυρτάλη': {'Νάπη': 7, 'Ἄστυλος': 3, 'Δάφνις': 30, 'Γνάθων': 1, 'Λάμων': 33, 'Χλόη': 4, 'Φιλητᾶς': 2, 'Νύμφαι': 1, 'Δρύας': 12},
-'Χλόη': {'Νάπη': 16, 'Διονυσοφάνης': 6, 'Πὰν': 14, 'Δάφνις': 296, 'Λάμων': 25, 'Μυρτάλη': 4, 'Φιλητᾶς': 6, 'Νύμφαι': 37, 'Δρύας': 41},
+'Χλόη': {'Νάπη': 16, 'Διονυσοφάνης': 6, 'Πὰν': 14, 'Δάφνις': 297, 'Λάμων': 25, 'Μυρτάλη': 4, 'Φιλητᾶς': 6, 'Νύμφαι': 37, 'Δρύας': 41},
 'Φιλητᾶς': {'Νάπη': 2, 'Πὰν': 7, 'Δάφνις': 26, 'Λάμων': 6, 'Μυρτάλη': 2, 'Χλόη': 6, 'Νύμφαι': 6, 'Δρύας': 8},
 'Νύμφαι': {'Νάπη': 4, 'Πὰν': 17, 'Διονυσοφάνης': 1, 'Δάφνις': 31, 'Γνάθων': 1, 'Λάμων': 15, 'Μυρτάλη': 1, 'Χλόη': 37, 'Φιλητᾶς': 7, 'Δρύας': 12},
 'Δρύας': {'Νάπη': 25, 'Διονυσοφάνης': 5, 'Δάφνις': 72, 'Γνάθων': 2, 'Λάμων': 27, 'Μυρτάλη': 12, 'Χλόη': 46, 'Φιλητᾶς': 8, 'Νύμφαι': 12},
@@ -204,15 +198,15 @@ def count_appearances(charlist, text):
 #add up sums of appearances for each character
 appearances = {'Νάπη': 16,
                'Διονυσοφάνης': 15,
-               'Πὰν': 35,
+               'Πὰν': 37,
                'Ἄστυλος': 14,
-               'Γνάθων': 20,
-               'Δάφνις': 306,
-               'Λάμων': 73,
+               'Γνάθων': 21,
+               'Δάφνις': 408,
+               'Λάμων': 74,
                'Μυρτάλη': 26,
-               'Χλόη': 277,
+               'Χλόη': 283,
                'Φιλητᾶς': 38,
-               'Νύμφαι': 69,
+               'Νύμφαι': 71,
                'Δρύας': 80,
                'Λυκαίνιον': 9,
                'Δόρκων': 31
@@ -228,7 +222,7 @@ for char in dict_of_dicts.keys():
 for char in dict_of_dicts.keys():
     for co_char in dict_of_dicts[char].keys():
         if dict_of_dicts[char][co_char] > 0:
-            d_and_c.add_edge(char, co_char, weight=dict_of_dicts[char][co_char], text=str(dict_of_dicts[char][co_char]))
+            d_and_c.add_edge(char, co_char, weight=dict_of_dicts[char][co_char], label='hej')
 
 #get position for the nodes
 pos_ = nx.spring_layout(d_and_c, seed=100)
@@ -271,8 +265,8 @@ for edge in d_and_c.edges():
 
         x0, y0 = pos_[char_1]
         x1, y1 = pos_[char_2]
-
-        text   = char_1 + '--' + char_2 + ': ' + str(d_and_c.edges()[edge]['weight'])
+        
+        text   = str(d_and_c.edges()[edge]['weight'])
         
         trace  = make_edge([x0, x1, None], [y0, y1, None], text,
                            0.15*d_and_c.edges()[edge]['weight'])
@@ -284,11 +278,12 @@ node_trace = go.Scatter(x         = [],
                         y         = [],
                         text      = [],
                         textposition = "middle center",
-                        textfont_size = 20,
+                        textfont_size = 28,
+                        textfont_color = 'purple',
                         mode      = 'markers+text',
                         hoverinfo = 'none',
                         fillcolor='lightgreen',
-                        marker = dict(color=['black'], size=[])
+                        marker = dict(color=[], size=[])
 )
 
 # For each node get the position and size and add to the node_trace
@@ -325,8 +320,8 @@ fig.show()
 
 #measure degree centrality
 deg_cent = nx.degree_centrality(d_and_c)
-""" for k, v in deg_cent.items():
-    print(k, round(v, 2)) """
+for k, v in deg_cent.items():
+    print(k, round(v, 2))
 deg_bet = nx.betweenness_centrality(d_and_c)
 
-print(deg_bet)
+#print(deg_bet)
